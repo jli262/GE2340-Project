@@ -6,5 +6,7 @@ public class HunterAI : MonoBehaviour
 {
     public GameObject[] hunters;
     public GameObject piggy;
-    
+    public GameObject[] pos;
+
+
 }
