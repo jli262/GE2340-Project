@@ -19,8 +19,10 @@ public class HunterAI : MonoBehaviour
     int stepNum;
     bool isClicked;
     bool isYourTurn;
+    int moveNum;
 
     void Start(){
+        moveNum = 0;
         stepNum = 0;
         steps.text = "Steps: " + stepNum;
         difficulty = text.text;
@@ -49,14 +51,36 @@ public class HunterAI : MonoBehaviour
     }
 
     bool EagleMove(){
-        if(stepNum==0){
+       switch (moveNum)
+       {
+           case 0:
+            EagleMove0();
+            break;
+       }
+       return true;
+    }
+
+    void EagleMove0(){
+        if(hare.GetComponent<HareAttribute>().curPos.name == "Pos7"){
             hunters[2].GetComponent<EagleAttribute>().curPos = pos[4];
+            hunters[2].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
             hunters[2].transform.position = new Vector3(pos[4].transform.position.x, hunters[2].transform.position.y, pos[4].transform.position.z);
-            return true;
-        }else{
-            return true;
+        } else if(hare.GetComponent<HareAttribute>().curPos.name == "Pos6"){
+            hunters[1].GetComponent<EagleAttribute>().curPos = pos[10];
+            hunters[1].GetComponent<EagleAttribute>().psbDes = pos[10].GetComponent<EagleAttribute>().psbDes;
+            hunters[1].transform.position = new Vector3(pos[10].transform.position.x, hunters[1].transform.position.y, pos[10].transform.position.z);
+        } else if(hare.GetComponent<HareAttribute>().curPos.name == "Pos8"){
+            hunters[2].GetComponent<EagleAttribute>().curPos = pos[4];
+            hunters[2].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+            hunters[2].transform.position = new Vector3(pos[4].transform.position.x, hunters[2].transform.position.y, pos[4].transform.position.z);
+        }else if(hare.GetComponent<HareAttribute>().curPos.name == "Pos9"){
+            hunters[2].GetComponent<EagleAttribute>().curPos = pos[4];
+            hunters[2].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+            hunters[2].transform.position = new Vector3(pos[4].transform.position.x, hunters[2].transform.position.y, pos[4].transform.position.z);
         }
     }
+
+
     void Update(){
         if(isYourTurn && Input.GetMouseButton(0)){
             RaycastHit hit;
