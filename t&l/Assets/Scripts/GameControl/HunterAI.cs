@@ -311,9 +311,9 @@ public class HunterAI : MonoBehaviour
                 hunters[0].GetComponent<EagleAttribute>().psbDes = pos[2].GetComponent<EagleAttribute>().psbDes;
                 hunters[0].transform.position = new Vector3(pos[2].transform.position.x, hunters[1].transform.position.y, pos[2].transform.position.z);
             }else if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3"){
-                hunters[0].GetComponent<EagleAttribute>().curPos = pos[5];
-                hunters[0].GetComponent<EagleAttribute>().psbDes = pos[5].GetComponent<EagleAttribute>().psbDes;
-                hunters[0].transform.position = new Vector3(pos[5].transform.position.x, hunters[1].transform.position.y, pos[5].transform.position.z); 
+                hunters[1].GetComponent<EagleAttribute>().curPos = pos[5];
+                hunters[1].GetComponent<EagleAttribute>().psbDes = pos[5].GetComponent<EagleAttribute>().psbDes;
+                hunters[1].transform.position = new Vector3(pos[5].transform.position.x, hunters[1].transform.position.y, pos[5].transform.position.z); 
             }
         }else if(hare.GetComponent<HareAttribute>().curPos.name == "Pos9"){
             if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos11"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3"){
