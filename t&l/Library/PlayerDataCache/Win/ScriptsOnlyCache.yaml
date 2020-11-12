@@ -62,41 +62,41 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 11202}
+      Script: {instanceID: 11152}
     - Class: 114
-      Script: {instanceID: 11228}
+      Script: {instanceID: 11178}
     - Class: 114
-      Script: {instanceID: 11372}
+      Script: {instanceID: 11322}
     - Class: 114
-      Script: {instanceID: 11374}
+      Script: {instanceID: 11324}
     - Class: 114
-      Script: {instanceID: 11412}
+      Script: {instanceID: 11362}
     - Class: 114
-      Script: {instanceID: 11716}
+      Script: {instanceID: 11666}
     - Class: 114
-      Script: {instanceID: 11810}
+      Script: {instanceID: 11760}
     - Class: 114
-      Script: {instanceID: 11824}
+      Script: {instanceID: 11774}
     - Class: 114
-      Script: {instanceID: 11926}
+      Script: {instanceID: 11876}
     - Class: 114
-      Script: {instanceID: 12012}
+      Script: {instanceID: 11962}
     - Class: 114
-      Script: {instanceID: 12046}
+      Script: {instanceID: 11996}
     - Class: 114
-      Script: {instanceID: 12212}
+      Script: {instanceID: 12162}
     - Class: 114
-      Script: {instanceID: 12612}
+      Script: {instanceID: 12564}
     - Class: 114
-      Script: {instanceID: 12706}
+      Script: {instanceID: 12658}
     - Class: 114
-      Script: {instanceID: 12792}
+      Script: {instanceID: 12744}
     - Class: 114
-      Script: {instanceID: 13056}
+      Script: {instanceID: 13008}
     - Class: 114
-      Script: {instanceID: 13068}
+      Script: {instanceID: 13020}
     - Class: 114
-      Script: {instanceID: 13082}
+      Script: {instanceID: 13034}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -135,21 +135,21 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 11202}
+      Script: {instanceID: 11152}
     - Class: 114
-      Script: {instanceID: 11210}
+      Script: {instanceID: 11160}
     - Class: 114
-      Script: {instanceID: 11372}
+      Script: {instanceID: 11322}
     - Class: 114
-      Script: {instanceID: 11412}
+      Script: {instanceID: 11362}
     - Class: 114
-      Script: {instanceID: 11810}
+      Script: {instanceID: 11760}
     - Class: 114
-      Script: {instanceID: 12212}
+      Script: {instanceID: 12162}
     - Class: 114
-      Script: {instanceID: 12706}
+      Script: {instanceID: 12658}
     - Class: 114
-      Script: {instanceID: 13068}
+      Script: {instanceID: 13020}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -633,4 +633,5 @@ ScriptsOnlyBuild:
   scenePathNames:
   - Assets/Scenes/InitialUI.unity
   - Assets/Scenes/Game.unity
-  playerPath: C:/Users/Z0047kke/Desktop/GE2340-Project/Eagles and Hare.exe
+  playerPath: C:/Users/Z0047kke/Desktop/GE2340-Project/Eagles and Hare/Eagles and
+    Hare.exe
