@@ -503,7 +503,7 @@ public class HunterAI : MonoBehaviour
 
     bool IfFinished()
     {
-        if (stepNum == 51)
+        if (stepNum == 31)
         {
             Win.SetActive(true);
             return true;
