@@ -323,8 +323,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09529740b82cf8c47bfb1a652ec569d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curPos: {fileID: 0}
-  psbDes: []
+  curPos: {fileID: 5244171}
+  psbDes:
+  - {fileID: 1748910362}
+  - {fileID: 1717295977}
+  - {fileID: 342200247}
+  - {fileID: 298241018}
+  - {fileID: 1009307855}
 --- !u!114 &5244177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -854,11 +859,11 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: Easy
+    - m_Text: Baby
       m_Image: {fileID: 0}
-    - m_Text: Middle
+    - m_Text: Nightmare
       m_Image: {fileID: 0}
-    - m_Text: Hard
+    - m_Text: Random
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1470,6 +1475,9 @@ MonoBehaviour:
   psbDes:
   - {fileID: 1009307855}
   - {fileID: 1479111810}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &298241024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1824,6 +1832,9 @@ MonoBehaviour:
   psbDes:
   - {fileID: 1479111810}
   - {fileID: 1009307855}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &342200253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2377,6 +2388,8 @@ MonoBehaviour:
   - {fileID: 810569108}
   - {fileID: 5244171}
   - {fileID: 1748910362}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &606136367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3428,6 +3441,8 @@ MonoBehaviour:
   - {fileID: 606136361}
   - {fileID: 1557634227}
   - {fileID: 5244171}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &810569114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4398,6 +4413,8 @@ MonoBehaviour:
   - {fileID: 1479111810}
   - {fileID: 342200247}
   - {fileID: 298241018}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &1009307861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6190,7 +6207,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curPos: {fileID: 1479111810}
-  psbDes: []
+  psbDes:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &1479111816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6582,6 +6604,8 @@ MonoBehaviour:
   - {fileID: 810569108}
   - {fileID: 5244171}
   - {fileID: 1717295977}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &1557634233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7186,6 +7210,9 @@ MonoBehaviour:
   psbDes:
   - {fileID: 5244171}
   - {fileID: 298241018}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &1717295983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7409,6 +7436,9 @@ MonoBehaviour:
   psbDes:
   - {fileID: 5244171}
   - {fileID: 342200247}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &1748910368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7633,6 +7663,8 @@ MonoBehaviour:
   - {fileID: 606136361}
   - {fileID: 1557634227}
   - {fileID: 810569108}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &1795762455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8580,7 +8612,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Easy
+  m_Text: Baby
 --- !u!222 &2063089855
 CanvasRenderer:
   m_ObjectHideFlags: 0

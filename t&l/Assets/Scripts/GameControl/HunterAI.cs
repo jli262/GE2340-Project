@@ -31,10 +31,44 @@ public class HunterAI : MonoBehaviour
         isYourTurn = false;
         UI.SetActive(false);
         Turn.SetActive(true);
-        StartCoroutine(GameRunning());
+        if(difficulty == "Baby"){
+            StartCoroutine(EasyGameRunning());
+        }
+        else if(difficulty == "Nightmare"){
+            StartCoroutine(HardGameRunning());
+        }
+        else if (difficulty == "Random"){
+            float ranNum;
+            ranNum = Random.Range(0.0f, 2.0f);
+            if(ranNum>=0&&ranNum<1){
+                StartCoroutine(EasyGameRunning());
+            }else{
+                StartCoroutine(HardGameRunning());
+            }
+        }
     }
-
-    IEnumerator GameRunning()
+    IEnumerator EasyGameRunning(){
+        while (!IfFinished())
+        {
+            if (stepNum % 2 == 0)
+            {
+                turn.text = "AI is operating...";
+                yield return new WaitForSeconds(2);
+                yield return new WaitUntil(() => RanEagleMove());
+                isYourTurn = true;
+            }
+            else
+            {
+                turn.text = "Your turn!";
+                yield return new WaitUntil(() => isClicked);
+                isClicked = false;
+                isYourTurn = false;
+            }
+            stepNum++;
+            steps.text = "Steps: " + stepNum.ToString();
+        }
+    }
+    IEnumerator HardGameRunning()
     {
         while (!IfFinished())
         {
@@ -56,6 +90,54 @@ public class HunterAI : MonoBehaviour
             steps.text = "Steps: " + stepNum.ToString();
         }
     }
+
+    bool RanEagleMove(){
+        GameObject tbMoved;
+        float ranNum = Random.Range(0.0f, 3.0f);
+        bool isValid = false;
+        int index;
+        if(ranNum >= 0&&ranNum < 1){
+            tbMoved = hunters[0];
+            index = 0;
+        }else if(ranNum >= 1&&ranNum < 2){
+            tbMoved = hunters[1];
+            index = 1;
+        }else {
+            tbMoved = hunters[2];
+            index = 2;
+        }
+        List<int> psbPos = new List<int>();
+        while(!isValid){
+            psbPos = new List<int>();
+            int i = 0;
+            while(i<=4 && tbMoved.GetComponent<EagleAttribute>().psbDes[i]!=null){
+                if(tbMoved.GetComponent<EagleAttribute>().psbDes[i].name!=hunters[(index+1)%3].GetComponent<EagleAttribute>().curPos.name&&tbMoved.GetComponent<EagleAttribute>().psbDes[i].name!=hunters[(index+2)%3].GetComponent<EagleAttribute>().curPos.name&&tbMoved.GetComponent<EagleAttribute>().psbDes[i].name!=hare.GetComponent<HareAttribute>().curPos.name){
+                    psbPos.Add(i);
+                }
+                i++;
+            }
+            if(psbPos.Count != 0){
+                isValid = true;
+            }else{
+                index = (index+1)%3;
+                tbMoved = hunters[index];
+            }
+        }
+        float size = (float)psbPos.Count;
+        Debug.Log(size+" "+index);
+        ranNum = Random.Range(0.0f, size);
+        while(--size >= 0){
+            if(ranNum>=size&&ranNum<size+1){
+                GameObject tmp = tbMoved.GetComponent<EagleAttribute>().psbDes[psbPos[(int)size]];
+                hunters[index].GetComponent<EagleAttribute>().curPos = tmp;
+                hunters[index].GetComponent<EagleAttribute>().psbDes = tmp.GetComponent<EagleAttribute>().psbDes;
+                hunters[index].transform.position = new Vector3(tmp.transform.position.x, hunters[2].transform.position.y, tmp.transform.position.z);
+                break;
+            }
+        }
+        return true;
+    }
+
 
     bool EagleMove()
     {
