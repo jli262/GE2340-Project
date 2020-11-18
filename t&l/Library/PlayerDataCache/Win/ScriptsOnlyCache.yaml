@@ -8,6 +8,7 @@ ScriptsOnlyBuild:
     - HareAttribute
     - HunterAI
     - LoadGame
+    - ToRules
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
     UnityEditor.TestRunner.dll:
@@ -62,41 +63,41 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 11152}
+      Script: {instanceID: 11154}
     - Class: 114
-      Script: {instanceID: 11178}
-    - Class: 114
-      Script: {instanceID: 11322}
+      Script: {instanceID: 11180}
     - Class: 114
       Script: {instanceID: 11324}
     - Class: 114
-      Script: {instanceID: 11362}
+      Script: {instanceID: 11326}
     - Class: 114
-      Script: {instanceID: 11666}
+      Script: {instanceID: 11364}
     - Class: 114
-      Script: {instanceID: 11760}
+      Script: {instanceID: 11668}
     - Class: 114
-      Script: {instanceID: 11774}
+      Script: {instanceID: 11762}
     - Class: 114
-      Script: {instanceID: 11876}
+      Script: {instanceID: 11776}
     - Class: 114
-      Script: {instanceID: 11962}
+      Script: {instanceID: 11878}
     - Class: 114
-      Script: {instanceID: 11996}
+      Script: {instanceID: 11964}
     - Class: 114
-      Script: {instanceID: 12162}
+      Script: {instanceID: 11998}
     - Class: 114
-      Script: {instanceID: 12564}
+      Script: {instanceID: 12164}
     - Class: 114
-      Script: {instanceID: 12658}
+      Script: {instanceID: 12566}
     - Class: 114
-      Script: {instanceID: 12744}
+      Script: {instanceID: 12660}
     - Class: 114
-      Script: {instanceID: 13008}
+      Script: {instanceID: 12748}
     - Class: 114
-      Script: {instanceID: 13020}
+      Script: {instanceID: 13012}
     - Class: 114
-      Script: {instanceID: 13034}
+      Script: {instanceID: 13024}
+    - Class: 114
+      Script: {instanceID: 13038}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -132,24 +133,73 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
-    - Class: 108
+    - Class: 114
+      Script: {instanceID: 11154}
+    - Class: 114
+      Script: {instanceID: 11162}
+    - Class: 114
+      Script: {instanceID: 11324}
+    - Class: 114
+      Script: {instanceID: 11364}
+    - Class: 114
+      Script: {instanceID: 11762}
+    - Class: 114
+      Script: {instanceID: 12164}
+    - Class: 114
+      Script: {instanceID: 12660}
+    - Class: 114
+      Script: {instanceID: 12732}
+    - Class: 114
+      Script: {instanceID: 13024}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
+    Assets/Scenes/Rules.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 11152}
+      Script: {instanceID: 11154}
     - Class: 114
-      Script: {instanceID: 11160}
+      Script: {instanceID: 11324}
     - Class: 114
-      Script: {instanceID: 11322}
+      Script: {instanceID: 11364}
     - Class: 114
-      Script: {instanceID: 11362}
+      Script: {instanceID: 11762}
     - Class: 114
-      Script: {instanceID: 11760}
+      Script: {instanceID: 12164}
     - Class: 114
-      Script: {instanceID: 12162}
+      Script: {instanceID: 12660}
     - Class: 114
-      Script: {instanceID: 12658}
+      Script: {instanceID: 12748}
     - Class: 114
-      Script: {instanceID: 13020}
+      Script: {instanceID: 13024}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -520,6 +570,12 @@ ScriptsOnlyBuild:
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
+    className: ToRules
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
     className: BackToIni
   - hash:
       serializedVersion: 2
@@ -633,5 +689,6 @@ ScriptsOnlyBuild:
   scenePathNames:
   - Assets/Scenes/InitialUI.unity
   - Assets/Scenes/Game.unity
+  - Assets/Scenes/Rules.unity
   playerPath: C:/Users/Z0047kke/Desktop/GE2340-Project/Eagles and Hare/Eagles and
     Hare.exe
