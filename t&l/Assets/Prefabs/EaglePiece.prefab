@@ -102,7 +102,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7592088002919556214}
-  - component: {fileID: -9021256779965212122}
+  - component: {fileID: 7364363799489712692}
   m_Layer: 0
   m_Name: EaglePiece
   m_TagString: Untagged
@@ -126,7 +126,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!64 &-9021256779965212122
+--- !u!64 &7364363799489712692
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

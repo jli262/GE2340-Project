@@ -124,7 +124,6 @@ public class HunterAI : MonoBehaviour
             }
         }
         float size = (float)psbPos.Count;
-        Debug.Log(size+" "+index);
         ranNum = Random.Range(0.0f, size);
         while(--size >= 0){
             if(ranNum>=size&&ranNum<size+1){
