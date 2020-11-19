@@ -109,7 +109,7 @@ public class HareAI : MonoBehaviour
         int i = 0;
         List<int> psbPos = new List<int>();
         while(i<=7 && hare.GetComponent<HareAttribute>().psbDes[i]!=null){
-            if(hare.GetComponent<HareAttribute>().curPos.name!=hunters[0].GetComponent<EagleAttribute>().curPos.name&&hare.GetComponent<HareAttribute>().curPos.name!=hunters[1].GetComponent<EagleAttribute>().curPos.name&&hare.GetComponent<HareAttribute>().curPos.name!=hunters[2].GetComponent<EagleAttribute>().curPos.name){
+            if(hare.GetComponent<HareAttribute>().psbDes[i].name!=hunters[0].GetComponent<EagleAttribute>().curPos.name&&hare.GetComponent<HareAttribute>().psbDes[i].name!=hunters[1].GetComponent<EagleAttribute>().curPos.name&&hare.GetComponent<HareAttribute>().psbDes[i].name!=hunters[2].GetComponent<EagleAttribute>().curPos.name){
                 psbPos.Add(i);
             }
             i++;
@@ -119,8 +119,8 @@ public class HareAI : MonoBehaviour
         while(--size >= 0){
             if(ranNum>=size&&ranNum<size+1){
                 GameObject tmp = hare.GetComponent<HareAttribute>().psbDes[psbPos[(int)size]];
-                hare.GetComponent<EagleAttribute>().curPos = tmp;
-                hare.GetComponent<EagleAttribute>().psbDes = tmp.GetComponent<EagleAttribute>().psbDes;
+                hare.GetComponent<HareAttribute>().curPos = tmp;
+                hare.GetComponent<HareAttribute>().psbDes = tmp.GetComponent<HareAttribute>().psbDes;
                 hare.transform.position = new Vector3(tmp.transform.position.x, hare.transform.position.y, tmp.transform.position.z);
                 break;
             }
@@ -138,11 +138,11 @@ public class HareAI : MonoBehaviour
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.name.Contains("Eagle"))
             {
-                Debug.Log(hit.collider.gameObject.name);
                 for(int i=0;i<3;i++){
                     if(hit.collider.gameObject.name == hunters[i].name){
+                        lights[i].GetComponent<Light>().enabled = true;
                         lights[(i+1)%3].GetComponent<Light>().enabled = false;
                         lights[(i+2)%3].GetComponent<Light>().enabled = false;
                         movedGO = hunters[i];
@@ -151,6 +151,7 @@ public class HareAI : MonoBehaviour
             } else if (movedGO != null && Physics.Raycast(ray, out hit) && hit.collider.gameObject.name.Contains("Pos"))
             {
                 int i=0;
+                if(hunters[0].GetComponent<EagleAttribute>().curPos.name != hit.collider.gameObject.name && hunters[1].GetComponent<EagleAttribute>().curPos.name != hit.collider.gameObject.name && hunters[2].GetComponent<EagleAttribute>().curPos.name != hit.collider.gameObject.name && hare.GetComponent<HareAttribute>().curPos.name != hit.collider.gameObject.name)
                 while(movedGO.GetComponent<EagleAttribute>().psbDes[i]!=null){
                     if(movedGO.GetComponent<EagleAttribute>().psbDes[i].name == hit.collider.gameObject.name){
                         movedGO.GetComponent<EagleAttribute>().curPos = hit.collider.gameObject;
@@ -159,6 +160,7 @@ public class HareAI : MonoBehaviour
                         isClicked = true;
                         break;
                     }
+                    i++;
                 }
             }
         }
