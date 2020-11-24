@@ -23,7 +23,7 @@ public class HunterAI : MonoBehaviour
 
     void Start()
     {
-        moveNum = 0;
+        moveNum = 1;
         stepNum = 0;
         steps.text = "Steps: " + stepNum;
         difficulty = text.text;
@@ -31,23 +31,30 @@ public class HunterAI : MonoBehaviour
         isYourTurn = false;
         UI.SetActive(false);
         Turn.SetActive(true);
-        if(difficulty == "Baby"){
+        if (difficulty == "Baby")
+        {
             StartCoroutine(EasyGameRunning());
         }
-        else if(difficulty == "Nightmare"){
+        else if (difficulty == "Nightmare")
+        {
             StartCoroutine(HardGameRunning());
         }
-        else if (difficulty == "Random"){
+        else if (difficulty == "Random")
+        {
             float ranNum;
             ranNum = Random.Range(0.0f, 2.0f);
-            if(ranNum>=0&&ranNum<1){
+            if (ranNum >= 0 && ranNum < 1)
+            {
                 StartCoroutine(EasyGameRunning());
-            }else{
+            }
+            else
+            {
                 StartCoroutine(HardGameRunning());
             }
         }
     }
-    IEnumerator EasyGameRunning(){
+    IEnumerator EasyGameRunning()
+    {
         while (!IfFinished())
         {
             if (stepNum % 2 == 0)
@@ -91,42 +98,56 @@ public class HunterAI : MonoBehaviour
         }
     }
 
-    bool RanEagleMove(){
+    bool RanEagleMove()
+    {
         GameObject tbMoved;
         float ranNum = Random.Range(0.0f, 3.0f);
         bool isValid = false;
         int index;
-        if(ranNum >= 0&&ranNum < 1){
+        if (ranNum >= 0 && ranNum < 1)
+        {
             tbMoved = hunters[0];
             index = 0;
-        }else if(ranNum >= 1&&ranNum < 2){
+        }
+        else if (ranNum >= 1 && ranNum < 2)
+        {
             tbMoved = hunters[1];
             index = 1;
-        }else {
+        }
+        else
+        {
             tbMoved = hunters[2];
             index = 2;
         }
         List<int> psbPos = new List<int>();
-        while(!isValid){
+        while (!isValid)
+        {
             psbPos = new List<int>();
             int i = 0;
-            while(i<=4 && tbMoved.GetComponent<EagleAttribute>().psbDes[i]!=null){
-                if(tbMoved.GetComponent<EagleAttribute>().psbDes[i].name!=hunters[(index+1)%3].GetComponent<EagleAttribute>().curPos.name&&tbMoved.GetComponent<EagleAttribute>().psbDes[i].name!=hunters[(index+2)%3].GetComponent<EagleAttribute>().curPos.name&&tbMoved.GetComponent<EagleAttribute>().psbDes[i].name!=hare.GetComponent<HareAttribute>().curPos.name){
+            while (i <= 4 && tbMoved.GetComponent<EagleAttribute>().psbDes[i] != null)
+            {
+                if (tbMoved.GetComponent<EagleAttribute>().psbDes[i].name != hunters[(index + 1) % 3].GetComponent<EagleAttribute>().curPos.name && tbMoved.GetComponent<EagleAttribute>().psbDes[i].name != hunters[(index + 2) % 3].GetComponent<EagleAttribute>().curPos.name && tbMoved.GetComponent<EagleAttribute>().psbDes[i].name != hare.GetComponent<HareAttribute>().curPos.name)
+                {
                     psbPos.Add(i);
                 }
                 i++;
             }
-            if(psbPos.Count != 0){
+            if (psbPos.Count != 0)
+            {
                 isValid = true;
-            }else{
-                index = (index+1)%3;
+            }
+            else
+            {
+                index = (index + 1) % 3;
                 tbMoved = hunters[index];
             }
         }
         float size = (float)psbPos.Count;
         ranNum = Random.Range(0.0f, size);
-        while(--size >= 0){
-            if(ranNum>=size&&ranNum<size+1){
+        while (--size >= 0)
+        {
+            if (ranNum >= size && ranNum < size + 1)
+            {
                 GameObject tmp = tbMoved.GetComponent<EagleAttribute>().psbDes[psbPos[(int)size]];
                 hunters[index].GetComponent<EagleAttribute>().curPos = tmp;
                 hunters[index].GetComponent<EagleAttribute>().psbDes = tmp.GetComponent<EagleAttribute>().psbDes;
@@ -142,9 +163,6 @@ public class HunterAI : MonoBehaviour
     {
         switch (moveNum)
         {
-            case 0:
-                EagleMove0();
-                break;
             case 1:
                 EagleMove1();
                 break;
@@ -160,400 +178,1074 @@ public class HunterAI : MonoBehaviour
             case 5:
                 EagleMove5();
                 break;
-            case 6:
-                EagleMove6();
-                break;
-            case 7:
-                EagleMove7();
-                break;
-            case 8:
-                EagleMove8();
-                break;
         }
         return true;
     }
 
-    void EagleMove0()
-    {
-        if(hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos1"&&hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos11"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"){
-            if(hare.GetComponent<HareAttribute>().curPos.name == "Pos7"||hare.GetComponent<HareAttribute>().curPos.name == "Pos6"){
-                moveNum = 6;
-                EagleMove6();
-            }else if(hare.GetComponent<HareAttribute>().curPos.name == "Pos8"){
-                moveNum = 5;
-                EagleMove5();
-            }else if(hare.GetComponent<HareAttribute>().curPos.name == "Pos10"){
-                moveNum = 3;
-                EagleMove3();
-            }else if(hare.GetComponent<HareAttribute>().curPos.name == "Pos9"){
-                moveNum = 8;
-                EagleMove8();
-            }
-        }else
-        if (hare.GetComponent<HareAttribute>().curPos.name == "Pos7")
-        {
-            hunters[2].GetComponent<EagleAttribute>().curPos = pos[4];
-            hunters[2].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
-            hunters[2].transform.position = new Vector3(pos[4].transform.position.x, hunters[2].transform.position.y, pos[4].transform.position.z);
-        }
-        else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos8")
-        {
-            hunters[1].GetComponent<EagleAttribute>().curPos = pos[10];
-            hunters[1].GetComponent<EagleAttribute>().psbDes = pos[10].GetComponent<EagleAttribute>().psbDes;
-            hunters[1].transform.position = new Vector3(pos[10].transform.position.x, hunters[1].transform.position.y, pos[10].transform.position.z);
-            moveNum = 6;
-        }
-        else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos6")
-        {
-            hunters[1].GetComponent<EagleAttribute>().curPos = pos[10];
-            hunters[1].GetComponent<EagleAttribute>().psbDes = pos[10].GetComponent<EagleAttribute>().psbDes;
-            hunters[1].transform.position = new Vector3(pos[10].transform.position.x, hunters[1].transform.position.y, pos[10].transform.position.z);
-        }
-        else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos9")
-        {
-            hunters[1].GetComponent<EagleAttribute>().curPos = pos[10];
-            hunters[1].GetComponent<EagleAttribute>().psbDes = pos[10].GetComponent<EagleAttribute>().psbDes;
-            hunters[1].transform.position = new Vector3(pos[10].transform.position.x, hunters[1].transform.position.y, pos[10].transform.position.z);
-        }
-    }
     void EagleMove1()
     {
-        if (hare.GetComponent<HareAttribute>().curPos.name == "Pos7")
-        {
-            if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos4")
-            {
-                if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8")
-                {
-                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
-                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
-                    hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[1].transform.position.y, pos[8].transform.position.z);
-                }
-                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9")
-                {
-                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[7];
-                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
-                    hunters[2].transform.position = new Vector3(pos[7].transform.position.x, hunters[1].transform.position.y, pos[7].transform.position.z);
-                }
-            }else
-            {
-                hunters[0].GetComponent<EagleAttribute>().curPos = pos[5];
-                hunters[0].GetComponent<EagleAttribute>().psbDes = pos[5].GetComponent<EagleAttribute>().psbDes;
-                hunters[0].transform.position = new Vector3(pos[5].transform.position.x, hunters[1].transform.position.y, pos[5].transform.position.z);
-            }
-        }
-        else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos6")
-        {
-            if(hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"){
-                if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8")
-                {
-                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[2];
-                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[2].GetComponent<EagleAttribute>().psbDes;
-                    hunters[0].transform.position = new Vector3(pos[2].transform.position.x, hunters[1].transform.position.y, pos[2].transform.position.z);
-                    moveNum = 2;
-                }
-                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9")
-                {
-                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[1];
-                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[1].GetComponent<EagleAttribute>().psbDes;
-                    hunters[0].transform.position = new Vector3(pos[1].transform.position.x, hunters[1].transform.position.y, pos[1].transform.position.z);
-                    moveNum = 2;
-                }
-            }else{
-                hunters[0].GetComponent<EagleAttribute>().curPos = pos[4];
-                hunters[0].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
-                hunters[0].transform.position = new Vector3(pos[4].transform.position.x, hunters[1].transform.position.y, pos[4].transform.position.z);
-            }
-        }
-        else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos10")
-        {
-            hunters[0].GetComponent<EagleAttribute>().curPos = pos[2];
-            hunters[0].GetComponent<EagleAttribute>().psbDes = pos[2].GetComponent<EagleAttribute>().psbDes;
-            hunters[0].transform.position = new Vector3(pos[2].transform.position.x, hunters[1].transform.position.y, pos[2].transform.position.z);
-            moveNum = 2;
-        }else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos11")
-        {
-            hunters[0].GetComponent<EagleAttribute>().curPos = pos[1];
-            hunters[0].GetComponent<EagleAttribute>().psbDes = pos[1].GetComponent<EagleAttribute>().psbDes;
-            hunters[0].transform.position = new Vector3(pos[1].transform.position.x, hunters[1].transform.position.y, pos[1].transform.position.z);
-            moveNum = 2;
-        }
-    }
-    void EagleMove2()
-    {
-        if (hare.GetComponent<HareAttribute>().curPos.name == "Pos7")
-        {
-            if ((hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9")||(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8"))
-            {
-                hunters[2].GetComponent<EagleAttribute>().curPos = pos[5];
-                hunters[2].GetComponent<EagleAttribute>().psbDes = pos[5].GetComponent<EagleAttribute>().psbDes;
-                hunters[2].transform.position = new Vector3(pos[5].transform.position.x, hunters[1].transform.position.y, pos[5].transform.position.z);
-            }else if ((hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9")||(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8"))
-            {
-                hunters[0].GetComponent<EagleAttribute>().curPos = pos[5];
-                hunters[0].GetComponent<EagleAttribute>().psbDes = pos[5].GetComponent<EagleAttribute>().psbDes;
-                hunters[0].transform.position = new Vector3(pos[5].transform.position.x, hunters[1].transform.position.y, pos[5].transform.position.z);
-            
-            }
-            else if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos2" || hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos11")
-            {
-                hunters[2].GetComponent<EagleAttribute>().curPos = pos[7];
-                hunters[2].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
-                hunters[2].transform.position = new Vector3(pos[7].transform.position.x, hunters[1].transform.position.y, pos[7].transform.position.z);
-            }
-            else if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3" || hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos10")
-            {
-                hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
-                hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
-                hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[1].transform.position.y, pos[8].transform.position.z);
-            }
-        }
-        else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos6")
-        {
-            if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
-            {
-                if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8")
-                {
-                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[8];
-                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
-                    hunters[0].transform.position = new Vector3(pos[8].transform.position.x, hunters[1].transform.position.y, pos[8].transform.position.z);
-                }
-                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9")
-                {
-                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[7];
-                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
-                    hunters[0].transform.position = new Vector3(pos[7].transform.position.x, hunters[1].transform.position.y, pos[7].transform.position.z);
-                }
-            }
-            else
-            {
-                hunters[0].GetComponent<EagleAttribute>().curPos = pos[4];
-                hunters[0].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
-                hunters[0].transform.position = new Vector3(pos[4].transform.position.x, hunters[1].transform.position.y, pos[4].transform.position.z);
-            }
-        }else{
-            if (hare.GetComponent<HareAttribute>().curPos.name == "Pos8")
-                {
-                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[10];
-                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[10].GetComponent<EagleAttribute>().psbDes;
-                    hunters[0].transform.position = new Vector3(pos[10].transform.position.x, hunters[1].transform.position.y, pos[10].transform.position.z);
-                }
-                else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos9")
-                {
-                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[9];
-                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[9].GetComponent<EagleAttribute>().psbDes;
-                    hunters[0].transform.position = new Vector3(pos[9].transform.position.x, hunters[1].transform.position.y, pos[9].transform.position.z);
-                }
-        }
-    }
-    void EagleMove3()
-    {
-        if(hare.GetComponent<HareAttribute>().curPos.name == "Pos7"){
-            if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3"){
-                moveNum = 2;
-                EagleMove2();
-            }else if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos10"){
-                hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
-                hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
-                hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[1].transform.position.y, pos[8].transform.position.z);
-            }else if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos6"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos10"){
-                hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
-                hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
-                hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[1].transform.position.y, pos[7].transform.position.z);
-            }else if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos6"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3"){
-                hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
-                hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
-                hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[1].transform.position.y, pos[7].transform.position.z);
-            }else if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5"){
-                hunters[0].GetComponent<EagleAttribute>().curPos = pos[5];
-                hunters[0].GetComponent<EagleAttribute>().psbDes = pos[5].GetComponent<EagleAttribute>().psbDes;
-                hunters[0].transform.position = new Vector3(pos[5].transform.position.x, hunters[1].transform.position.y, pos[5].transform.position.z);
-            }else if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9"){
-                hunters[2].GetComponent<EagleAttribute>().curPos = pos[5];
-                hunters[2].GetComponent<EagleAttribute>().psbDes = pos[5].GetComponent<EagleAttribute>().psbDes;
-                hunters[2].transform.position = new Vector3(pos[5].transform.position.x, hunters[1].transform.position.y, pos[5].transform.position.z);
-            }
-        }else if(hare.GetComponent<HareAttribute>().curPos.name == "Pos6"){
-            if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3"){
-                hunters[0].GetComponent<EagleAttribute>().curPos = pos[9];
-                hunters[0].GetComponent<EagleAttribute>().psbDes = pos[9].GetComponent<EagleAttribute>().psbDes;
-                hunters[0].transform.position = new Vector3(pos[9].transform.position.x, hunters[1].transform.position.y, pos[9].transform.position.z);
-            }else if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos10"){
-                hunters[0].GetComponent<EagleAttribute>().curPos = pos[8];
-                hunters[0].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
-                hunters[0].transform.position = new Vector3(pos[8].transform.position.x, hunters[1].transform.position.y, pos[8].transform.position.z);
-            }else if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos10"){
-                hunters[0].GetComponent<EagleAttribute>().curPos = pos[4];
-                hunters[0].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
-                hunters[0].transform.position = new Vector3(pos[4].transform.position.x, hunters[1].transform.position.y, pos[4].transform.position.z);
-            }
-        }else if(hare.GetComponent<HareAttribute>().curPos.name == "Pos10"){
-            if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos11"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos1"){
-                hunters[0].GetComponent<EagleAttribute>().curPos = pos[2];
-                hunters[0].GetComponent<EagleAttribute>().psbDes = pos[2].GetComponent<EagleAttribute>().psbDes;
-                hunters[0].transform.position = new Vector3(pos[2].transform.position.x, hunters[1].transform.position.y, pos[2].transform.position.z);
-            }else if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3"){
-                hunters[1].GetComponent<EagleAttribute>().curPos = pos[5];
-                hunters[1].GetComponent<EagleAttribute>().psbDes = pos[5].GetComponent<EagleAttribute>().psbDes;
-                hunters[1].transform.position = new Vector3(pos[5].transform.position.x, hunters[1].transform.position.y, pos[5].transform.position.z); 
-            }
-        }else if(hare.GetComponent<HareAttribute>().curPos.name == "Pos9"){
-            if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos11"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3"){
-                hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
-                hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
-                hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[1].transform.position.y, pos[7].transform.position.z); 
-            }else if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos10"){
-                hunters[1].GetComponent<EagleAttribute>().curPos = pos[5];
-                hunters[1].GetComponent<EagleAttribute>().psbDes = pos[5].GetComponent<EagleAttribute>().psbDes;
-                hunters[1].transform.position = new Vector3(pos[5].transform.position.x, hunters[1].transform.position.y, pos[5].transform.position.z); 
-            }else if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos6"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3"){
-                hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
-                hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
-                hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[1].transform.position.y, pos[7].transform.position.z); 
-            }
-        }
-    }
-    void EagleMove4()
-    {
-        if (hare.GetComponent<HareAttribute>().curPos.name == "Pos7")
-        {
-            hunters[0].GetComponent<EagleAttribute>().curPos = pos[3];
-            hunters[0].GetComponent<EagleAttribute>().psbDes = pos[3].GetComponent<EagleAttribute>().psbDes;
-            hunters[0].transform.position = new Vector3(pos[3].transform.position.x, hunters[1].transform.position.y, pos[3].transform.position.z);
-        }
-        else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos11")
-        {
-            hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
-            hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
-            hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[1].transform.position.y, pos[7].transform.position.z);
-        }
-        else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos10")
-        {
-            hunters[1].GetComponent<EagleAttribute>().curPos = pos[8];
-            hunters[1].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
-            hunters[1].transform.position = new Vector3(pos[8].transform.position.x, hunters[1].transform.position.y, pos[8].transform.position.z);
-        }
-        else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos8")
-        {
-            hunters[1].GetComponent<EagleAttribute>().curPos = pos[8];
-            hunters[1].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
-            hunters[1].transform.position = new Vector3(pos[8].transform.position.x, hunters[1].transform.position.y, pos[8].transform.position.z);
-            moveNum = 1;
-        }
-        else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos9")
-        {
-            hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
-            hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
-            hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[1].transform.position.y, pos[7].transform.position.z);
-            moveNum = 1;
-        }
-    }
-    void EagleMove5()
-    {
-        if(hare.GetComponent<HareAttribute>().curPos.name == "Pos8"){
-            hunters[0].GetComponent<EagleAttribute>().curPos = pos[2];
-            hunters[0].GetComponent<EagleAttribute>().psbDes = pos[2].GetComponent<EagleAttribute>().psbDes;
-            hunters[0].transform.position = new Vector3(pos[2].transform.position.x, hunters[1].transform.position.y, pos[2].transform.position.z); 
-        }else if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos11"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3"){
-            hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
-            hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
-            hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[1].transform.position.y, pos[7].transform.position.z);
-        }else if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3"){
-            if(hare.GetComponent<HareAttribute>().curPos.name == "Pos6"){
-                moveNum = 3;
-                EagleMove3();
-            }else{
-                moveNum = 2;
-                EagleMove2();
-            }
-        }
-    }
-    void EagleMove6()
-    {
-        if (hare.GetComponent<HareAttribute>().curPos.name == "Pos7")
-        {
-            hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
-            hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
-            hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[1].transform.position.y, pos[7].transform.position.z);
-        }
-        else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos6")
-        {
-            if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos11")
-            {
-                hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
-                hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
-                hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[1].transform.position.y, pos[7].transform.position.z);
-                moveNum = 7;
-            }
-            else
-            {
-                hunters[0].GetComponent<EagleAttribute>().curPos = pos[2];
-                hunters[0].GetComponent<EagleAttribute>().psbDes = pos[2].GetComponent<EagleAttribute>().psbDes;
-                hunters[0].transform.position = new Vector3(pos[2].transform.position.x, hunters[0].transform.position.y, pos[2].transform.position.z);
-                moveNum = 2;
-            }
-        }
-        else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos9")
+        if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos1" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
         {
             hunters[0].GetComponent<EagleAttribute>().curPos = pos[3];
             hunters[0].GetComponent<EagleAttribute>().psbDes = pos[3].GetComponent<EagleAttribute>().psbDes;
             hunters[0].transform.position = new Vector3(pos[3].transform.position.x, hunters[0].transform.position.y, pos[3].transform.position.z);
-            moveNum = 1;
+        }
+        else if ((hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos4" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3"))
+        {
+            if (hare.GetComponent<HareAttribute>().curPos.name == "Pos6")
+            {
+                hunters[0].GetComponent<EagleAttribute>().curPos = pos[4];
+                hunters[0].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                hunters[0].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos8")
+            {
+                hunters[2].GetComponent<EagleAttribute>().curPos = pos[4];
+                hunters[2].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                hunters[2].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos9")
+            {
+                hunters[1].GetComponent<EagleAttribute>().curPos = pos[4];
+                hunters[1].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                hunters[1].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+            }
+        }
+        else if ((hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos4" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+            || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos4" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3"))
+        {
+            if (hare.GetComponent<HareAttribute>().curPos.name == "Pos6" || hare.GetComponent<HareAttribute>().curPos.name == "Pos11" || hare.GetComponent<HareAttribute>().curPos.name == "Pos10")
+            {
+                if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[2];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[2].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[2].transform.position.x, hunters[0].transform.position.y, pos[2].transform.position.z);
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[1];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[1].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[1].transform.position.x, hunters[0].transform.position.y, pos[1].transform.position.z);
+                }
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos7")
+            {
+                if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                    moveNum = 2;
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                    moveNum = 2;
+                }
+            }
+        }
+        else if ((hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+            || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+            || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3"))
+        {
+            if (hare.GetComponent<HareAttribute>().curPos.name == "Pos8")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[9];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[9].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[9].transform.position.x, hunters[0].transform.position.y, pos[9].transform.position.z);
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[9];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[9].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[9].transform.position.x, hunters[0].transform.position.y, pos[9].transform.position.z);
+                }
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos9")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[10];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[10].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[10].transform.position.x, hunters[0].transform.position.y, pos[10].transform.position.z);
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[10];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[10].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[10].transform.position.x, hunters[0].transform.position.y, pos[10].transform.position.z);
+                }
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos7")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[5];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[5].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[5].transform.position.x, hunters[0].transform.position.y, pos[5].transform.position.z);
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[5];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[5].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[5].transform.position.x, hunters[0].transform.position.y, pos[5].transform.position.z);
+                }
+                if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[5];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[5].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[5].transform.position.x, hunters[0].transform.position.y, pos[5].transform.position.z);
+                }
+            }
+            moveNum = 2;
         }
     }
-    void EagleMove7()
+
+    void EagleMove2()
     {
-        if (hare.GetComponent<HareAttribute>().curPos.name == "Pos9")
+        if ((hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos4" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+           || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos4" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3"))
         {
-            if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+            if (hare.GetComponent<HareAttribute>().curPos.name == "Pos8")
             {
-                hunters[0].GetComponent<EagleAttribute>().curPos = pos[3];
-                hunters[0].GetComponent<EagleAttribute>().psbDes = pos[3].GetComponent<EagleAttribute>().psbDes;
-                hunters[0].transform.position = new Vector3(pos[3].transform.position.x, hunters[1].transform.position.y, pos[3].transform.position.z);
-                moveNum = 1;
-            }
-            else
+                if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[4];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+                    moveNum = 3;
+                }
+            } else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos9")
             {
-                hunters[0].GetComponent<EagleAttribute>().curPos = pos[2];
-                hunters[0].GetComponent<EagleAttribute>().psbDes = pos[2].GetComponent<EagleAttribute>().psbDes;
-                hunters[0].transform.position = new Vector3(pos[2].transform.position.x, hunters[1].transform.position.y, pos[2].transform.position.z);
-                moveNum = 4;
+                if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[4];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+                    moveNum = 3;
+                }
             }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos6")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos4")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[4];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+                    moveNum = 3;
+                }
+            }
+        }
+        else if ((hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos6" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos6")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos6" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3"))
+        {
+            if (hare.GetComponent<HareAttribute>().curPos.name == "Pos8")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[4];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+                    moveNum = 3;
+                }else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[4];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+                    moveNum = 3;
+                }
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos9")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[4];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+                    moveNum = 3;
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[4];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+                    moveNum = 3;
+                }
+            }
+        }
+        else if ((hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos11" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos10")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos11" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos10" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos11" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos10"))
+        {
+            if (hare.GetComponent<HareAttribute>().curPos.name == "Pos6")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos11")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[7];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                    moveNum = 3;
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos11")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                    moveNum = 3;
+                }
+                else if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos10")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[8];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                    moveNum = 3;
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos10")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                    moveNum = 3;
+                }
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos7") 
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+                    {
+                        hunters[0].GetComponent<EagleAttribute>().curPos = pos[7];
+                        hunters[0].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                        hunters[0].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                        moveNum = 3;
+                    }else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+                    {
+                        hunters[0].GetComponent<EagleAttribute>().curPos = pos[8];
+                        hunters[0].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                        hunters[0].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                        moveNum = 3;
+                    }
+                }else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+                    {
+                        hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
+                        hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                        hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                        moveNum = 3;
+                    }
+                    else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+                    {
+                        hunters[1].GetComponent<EagleAttribute>().curPos = pos[8];
+                        hunters[1].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                        hunters[1].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                        moveNum = 3;
+                    }
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+                    {
+                        hunters[2].GetComponent<EagleAttribute>().curPos = pos[7];
+                        hunters[2].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                        hunters[2].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                        moveNum = 3;
+                    }
+                    else if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+                    {
+                        hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
+                        hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                        hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                        moveNum = 3;
+                    }
+                }
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos10")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos11")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[7];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                    moveNum = 3;
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos11")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                    moveNum = 3;
+                }
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos11")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos10")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[8];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                    moveNum = 3;
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos10")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8 ].transform.position.z);
+                    moveNum = 3;
+                }
+            }
+        }
+    }
+
+    void EagleMove3()
+    {
+        if ((hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos11" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos10")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos11" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos10" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos11" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos10"))
+        {
+            if (hare.GetComponent<HareAttribute>().curPos.name == "Pos6")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos11")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[4];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos11")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[4];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+                }
+                else if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos10")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[4];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos10")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[4];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+                }
+            }else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos8")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[4];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+                    moveNum = 4;
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[4];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+                    moveNum = 4;
+                }
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos9")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[4];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+                    moveNum = 4;
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[4];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+                    moveNum = 4;
+                }
+            }
+        }
+        else if ((hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"))
+        {
+            if (hare.GetComponent<HareAttribute>().curPos.name == "Pos7")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                    {
+                        hunters[0].GetComponent<EagleAttribute>().curPos = pos[8];
+                        hunters[0].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                        hunters[0].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                        moveNum = 4;
+                    }else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                    {
+                        hunters[0].GetComponent<EagleAttribute>().curPos = pos[7];
+                        hunters[0].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                        hunters[0].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                        moveNum = 4;
+                    }
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                    {
+                        hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
+                        hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                        hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                        moveNum = 4;
+                    }
+                    else if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                    {
+                        hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
+                        hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                        hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                        moveNum = 4;
+                    }
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                    {
+                        hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
+                        hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                        hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                        moveNum = 4;
+                    }
+                    else if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                    {
+                        hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
+                        hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                        hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                        moveNum = 4;
+                    }
+                }
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos8")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[3];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[3].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[3].transform.position.x, hunters[0].transform.position.y, pos[3].transform.position.z);
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[3];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[3].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[3].transform.position.x, hunters[0].transform.position.y, pos[3].transform.position.z);
+                }
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos9")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[3];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[3].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[3].transform.position.x, hunters[0].transform.position.y, pos[3].transform.position.z);
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[3];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[3].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[3].transform.position.x, hunters[0].transform.position.y, pos[3].transform.position.z);
+                }
+            }
+        }
+        else if ((hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos4")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos4" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos4" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos4" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos4")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos4" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos4")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos4" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos4" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos4" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos4")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos4" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"))
+        {
+            if (hare.GetComponent<HareAttribute>().curPos.name == "Pos7")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                    {
+                        hunters[0].GetComponent<EagleAttribute>().curPos = pos[8];
+                        hunters[0].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                        hunters[0].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                        moveNum = 4;
+                    }
+                    else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                    {
+                        hunters[0].GetComponent<EagleAttribute>().curPos = pos[7];
+                        hunters[0].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                        hunters[0].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                        moveNum = 4;
+                    }else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                    {
+                        hunters[0].GetComponent<EagleAttribute>().curPos = pos[8];
+                        hunters[0].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                        hunters[0].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                        moveNum = 4;
+                    }
+                    else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                    {
+                        hunters[0].GetComponent<EagleAttribute>().curPos = pos[7];
+                        hunters[0].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                        hunters[0].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                        moveNum = 4;
+                    }
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                    {
+                        hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
+                        hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                        hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                        moveNum = 4;
+                    }
+                    else if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                    {
+                        hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
+                        hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                        hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                        moveNum = 4;
+                    }else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                    {
+                        hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
+                        hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                        hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                        moveNum = 4;
+                    }
+                    else if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                    {
+                        hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
+                        hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                        hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                        moveNum = 4;
+                    }
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                    {
+                        hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
+                        hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                        hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                        moveNum = 4;
+                    }
+                    else if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                    {
+                        hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
+                        hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                        hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                        moveNum = 4;
+                    }else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                    {
+                        hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
+                        hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                        hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                        moveNum = 4;
+                    }
+                    else if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                    {
+                        hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
+                        hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                        hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                        moveNum = 4;
+                    }
+                }
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos11")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos4")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[1];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[1].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[1].transform.position.x, hunters[0].transform.position.y, pos[1].transform.position.z);
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos4")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[1];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[1].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[1].transform.position.x, hunters[0].transform.position.y, pos[1].transform.position.z);
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos4")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[1];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[1].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[1].transform.position.x, hunters[0].transform.position.y, pos[1].transform.position.z);
+                }
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos10")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos4")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[2];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[2].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[2].transform.position.x, hunters[0].transform.position.y, pos[2].transform.position.z);
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos4")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[2];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[2].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[2].transform.position.x, hunters[0].transform.position.y, pos[2].transform.position.z);
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos4")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[2];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[2].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[2].transform.position.x, hunters[0].transform.position.y, pos[2].transform.position.z);
+                }
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos6")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos4")
+                {
+                    if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9"|| hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                    {
+                        hunters[0].GetComponent<EagleAttribute>().curPos = pos[1];
+                        hunters[0].GetComponent<EagleAttribute>().psbDes = pos[1].GetComponent<EagleAttribute>().psbDes;
+                        hunters[0].transform.position = new Vector3(pos[1].transform.position.x, hunters[0].transform.position.y, pos[1].transform.position.z);
+                    }
+                    else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"|| hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                    {
+                        hunters[0].GetComponent<EagleAttribute>().curPos = pos[2];
+                        hunters[0].GetComponent<EagleAttribute>().psbDes = pos[2].GetComponent<EagleAttribute>().psbDes;
+                        hunters[0].transform.position = new Vector3(pos[2].transform.position.x, hunters[0].transform.position.y, pos[2].transform.position.z);
+                    }
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos4")
+                {
+                    if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9"|| hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                    {
+                        hunters[2].GetComponent<EagleAttribute>().curPos = pos[1];
+                        hunters[2].GetComponent<EagleAttribute>().psbDes = pos[1].GetComponent<EagleAttribute>().psbDes;
+                        hunters[2].transform.position = new Vector3(pos[1].transform.position.x, hunters[0].transform.position.y, pos[1].transform.position.z);
+                    }
+                    else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"|| hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                    {
+                        hunters[2].GetComponent<EagleAttribute>().curPos = pos[2];
+                        hunters[2].GetComponent<EagleAttribute>().psbDes = pos[2].GetComponent<EagleAttribute>().psbDes;
+                        hunters[2].transform.position = new Vector3(pos[2].transform.position.x, hunters[0].transform.position.y, pos[2].transform.position.z);
+                    }
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos4")
+                {
+                    if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8"|| hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                    {
+                        hunters[1].GetComponent<EagleAttribute>().curPos = pos[2];
+                        hunters[1].GetComponent<EagleAttribute>().psbDes = pos[2].GetComponent<EagleAttribute>().psbDes;
+                        hunters[1].transform.position = new Vector3(pos[2].transform.position.x, hunters[0].transform.position.y, pos[2].transform.position.z);
+                    }
+                    else if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9"|| hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                    {
+                        hunters[1].GetComponent<EagleAttribute>().curPos = pos[1];
+                        hunters[1].GetComponent<EagleAttribute>().psbDes = pos[1].GetComponent<EagleAttribute>().psbDes;
+                        hunters[1].transform.position = new Vector3(pos[1].transform.position.x, hunters[0].transform.position.y, pos[1].transform.position.z);
+                    }
+                }
+            }
+        }
+        else if ((hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos3" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos3" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8"))
+        {
+            if (hare.GetComponent<HareAttribute>().curPos.name == "Pos7")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8" || hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                    {
+                        hunters[0].GetComponent<EagleAttribute>().curPos = pos[8];
+                        hunters[0].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                        hunters[0].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                        moveNum = 4;
+                    }
+                    else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9" || hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                    {
+                        hunters[0].GetComponent<EagleAttribute>().curPos = pos[7];
+                        hunters[0].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                        hunters[0].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                        moveNum = 4;
+                    }
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9"|| hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                    {
+                        hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
+                        hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                        hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                        moveNum = 4;
+                    }
+                    else if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8" || hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                    {
+                        hunters[1].GetComponent<EagleAttribute>().curPos = pos[8];
+                        hunters[1].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                        hunters[1].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                        moveNum = 4;
+                    }
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+                {
+                    if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8" || hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                    {
+                        hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
+                        hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                        hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                        moveNum = 4;
+                    }
+                    else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9" || hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                    {
+                        hunters[2].GetComponent<EagleAttribute>().curPos = pos[7];
+                        hunters[2].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                        hunters[2].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                        moveNum = 4;
+                    }
+                }
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos9")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[9];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[9].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[9].transform.position.x, hunters[0].transform.position.y, pos[9].transform.position.z);
+                    moveNum = 4;
+                }else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[9];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[9].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[9].transform.position.x, hunters[0].transform.position.y, pos[9].transform.position.z);
+                    moveNum = 4;
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[9];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[9].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[9].transform.position.x, hunters[0].transform.position.y, pos[9].transform.position.z);
+                    moveNum = 4;
+                }
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos8")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[10];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[10].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[10].transform.position.x, hunters[0].transform.position.y, pos[10].transform.position.z);
+                    moveNum = 4;
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[10];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[10].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[10].transform.position.x, hunters[0].transform.position.y, pos[10].transform.position.z);
+                    moveNum = 4;
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[10];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[10].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[10].transform.position.x, hunters[0].transform.position.y, pos[10].transform.position.z);
+                    moveNum = 4;
+                }
+            }
+        }
+        else if ((hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos6" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos6" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos6")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos6")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos6" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos6" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3"))
+        {
+            if (hare.GetComponent<HareAttribute>().curPos.name == "Pos7")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[3];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[3].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[3].transform.position.x, hunters[0].transform.position.y, pos[3].transform.position.z);
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos2")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[3];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[3].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[3].transform.position.x, hunters[0].transform.position.y, pos[3].transform.position.z);
+                }
+                else if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[3];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[3].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[3].transform.position.x, hunters[0].transform.position.y, pos[3].transform.position.z);
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos3")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[3];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[3].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[3].transform.position.x, hunters[0].transform.position.y, pos[3].transform.position.z);
+                }
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos11")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos6")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[7];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos6")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos6")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[7];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                }
+            }
+            else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos10")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos6")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[8];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos6")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[8];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos6")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                }
+            }
+        }
+        else if ((hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos6" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos4" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos4" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos6" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos4" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos6")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos4" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos6")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos6" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos4")
+          || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos6" && hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos4"))
+        {
+            if (hare.GetComponent<HareAttribute>().curPos.name == "Pos8")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos6")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[8];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos6")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[8];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos6")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                }
+            }else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos9")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos6")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[7];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos6")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                }
+                else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos6")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[7];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                }
+            }
+        }
+    }
+
+    void EagleMove4()
+    {
+        if ((hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9") || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"))
+        {
+            hunters[2].GetComponent<EagleAttribute>().curPos = pos[4];
+            hunters[2].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+            hunters[2].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+            moveNum = 5;
+        }
+        else if ((hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9") || (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"))
+        {
+            hunters[0].GetComponent<EagleAttribute>().curPos = pos[4];
+            hunters[0].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+            hunters[0].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+            moveNum = 5;
+        }
+        else if ((hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9") || (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8"))
+        {
+            hunters[1].GetComponent<EagleAttribute>().curPos = pos[4];
+            hunters[1].GetComponent<EagleAttribute>().psbDes = pos[4].GetComponent<EagleAttribute>().psbDes;
+            hunters[1].transform.position = new Vector3(pos[4].transform.position.x, hunters[0].transform.position.y, pos[4].transform.position.z);
+            moveNum = 5;
         }
         else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos7")
         {
-            hunters[1].GetComponent<EagleAttribute>().curPos = pos[5];
-            hunters[1].GetComponent<EagleAttribute>().psbDes = pos[5].GetComponent<EagleAttribute>().psbDes;
-            hunters[1].transform.position = new Vector3(pos[5].transform.position.x, hunters[1].transform.position.y, pos[5].transform.position.z);
+            if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+            {
+                if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8" || hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[8];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                }
+                else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9" || hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                {
+                    hunters[0].GetComponent<EagleAttribute>().curPos = pos[7];
+                    hunters[0].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                    hunters[0].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                }
+            }
+            else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8" || hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[8];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                }
+                else if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9" || hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                {
+                    hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
+                    hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                    hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                }
+            }
+            else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5")
+            {
+                if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8" || hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                }
+                else if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9" || hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9")
+                {
+                    hunters[2].GetComponent<EagleAttribute>().curPos = pos[7];
+                    hunters[2].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                    hunters[2].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                }
+            }
         }
-        else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos8")
+        else if (hare.GetComponent<HareAttribute>().curPos.name == "Pos6")
         {
-            hunters[0].GetComponent<EagleAttribute>().curPos = pos[1];
-            hunters[0].GetComponent<EagleAttribute>().psbDes = pos[1].GetComponent<EagleAttribute>().psbDes;
-            hunters[0].transform.position = new Vector3(pos[1].transform.position.x, hunters[1].transform.position.y, pos[1].transform.position.z);
-            moveNum = 4;
-        }
-    }
-    void EagleMove8()
-    {
-        if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos11"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos1"){
-            hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
-            hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
-            hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[2].transform.position.y, pos[7].transform.position.z);
-        }else if(hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"&&hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos5"&&hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos1"){
-            if(hare.GetComponent<HareAttribute>().curPos.name == "Pos6"){
-                moveNum = 6;
-                EagleMove6();
-            }else if(hare.GetComponent<HareAttribute>().curPos.name == "Pos7"){
-                moveNum = 7;
-                EagleMove7();
-            }else if(hare.GetComponent<HareAttribute>().curPos.name == "Pos10"){
-                hunters[0].GetComponent<EagleAttribute>().curPos = pos[2];
-                hunters[0].GetComponent<EagleAttribute>().psbDes = pos[2].GetComponent<EagleAttribute>().psbDes;
-                hunters[0].transform.position = new Vector3(pos[2].transform.position.x, hunters[2].transform.position.y, pos[2].transform.position.z);
-                moveNum = 2;
+            if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos11")
+            {
+                hunters[0].GetComponent<EagleAttribute>().curPos = pos[7];
+                hunters[0].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                hunters[0].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                moveNum = 5;
+            }else if (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos10")
+            {
+                hunters[0].GetComponent<EagleAttribute>().curPos = pos[8];
+                hunters[0].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                hunters[0].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                moveNum = 5;
+            }
+            else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos11")
+            {
+                hunters[1].GetComponent<EagleAttribute>().curPos = pos[7];
+                hunters[1].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                hunters[1].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                moveNum = 5;
+            }
+            else if (hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos10")
+            {
+                hunters[1].GetComponent<EagleAttribute>().curPos = pos[8];
+                hunters[1].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                hunters[1].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                moveNum = 5;
+            }
+            else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos11")
+            {
+                hunters[2].GetComponent<EagleAttribute>().curPos = pos[7];
+                hunters[2].GetComponent<EagleAttribute>().psbDes = pos[7].GetComponent<EagleAttribute>().psbDes;
+                hunters[2].transform.position = new Vector3(pos[7].transform.position.x, hunters[0].transform.position.y, pos[7].transform.position.z);
+                moveNum = 5;
+            }
+            else if (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos10")
+            {
+                hunters[2].GetComponent<EagleAttribute>().curPos = pos[8];
+                hunters[2].GetComponent<EagleAttribute>().psbDes = pos[8].GetComponent<EagleAttribute>().psbDes;
+                hunters[2].transform.position = new Vector3(pos[8].transform.position.x, hunters[0].transform.position.y, pos[8].transform.position.z);
+                moveNum = 5;
             }
         }
     }
+
+    void EagleMove5()
+    {
+        if ((hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9") || (hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"))
+        {
+            hunters[2].GetComponent<EagleAttribute>().curPos = pos[5];
+            hunters[2].GetComponent<EagleAttribute>().psbDes = pos[5].GetComponent<EagleAttribute>().psbDes;
+            hunters[2].transform.position = new Vector3(pos[5].transform.position.x, hunters[0].transform.position.y, pos[5].transform.position.z);
+        }
+        else if ((hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos9") || (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[1].GetComponent<EagleAttribute>().curPos.name == "Pos8"))
+        {
+            hunters[0].GetComponent<EagleAttribute>().curPos = pos[5];
+            hunters[0].GetComponent<EagleAttribute>().psbDes = pos[5].GetComponent<EagleAttribute>().psbDes;
+            hunters[0].transform.position = new Vector3(pos[5].transform.position.x, hunters[0].transform.position.y, pos[5].transform.position.z);
+        }
+        else if ((hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos8" && hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos9") || (hunters[2].GetComponent<EagleAttribute>().curPos.name == "Pos9" && hunters[0].GetComponent<EagleAttribute>().curPos.name == "Pos8"))
+        {
+            hunters[1].GetComponent<EagleAttribute>().curPos = pos[5];
+            hunters[1].GetComponent<EagleAttribute>().psbDes = pos[5].GetComponent<EagleAttribute>().psbDes;
+            hunters[1].transform.position = new Vector3(pos[5].transform.position.x, hunters[0].transform.position.y, pos[5].transform.position.z);
+        }
+    }
+
     void Update()
     {
         if (isYourTurn && Input.GetMouseButton(0))
