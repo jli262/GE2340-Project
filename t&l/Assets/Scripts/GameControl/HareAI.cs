@@ -132,7 +132,20 @@ public class HareAI : MonoBehaviour
         int i = 0;
         Queue<GameObject> des = new Queue<GameObject>();
         GameObject tmp;
-        for (i = 0;  i <= 7 && hare.GetComponent<HareAttribute>().psbDes[i] != null; i++)
+        for (i = 0; i <= 7 && hare.GetComponent<HareAttribute>().psbDes[i] != null; i++)
+        {
+            tmp = hare.GetComponent<HareAttribute>().psbDes[i];
+            if (tmp.transform.position.x <= hunters[0].GetComponent<EagleAttribute>().curPos.transform.position.x
+        && tmp.transform.position.x <= hunters[1].GetComponent<EagleAttribute>().curPos.transform.position.x
+        && tmp.transform.position.x <= hunters[2].GetComponent<EagleAttribute>().curPos.transform.position.x && tmp.name != hunters[0].GetComponent<EagleAttribute>().curPos.name && tmp.name != hunters[1].GetComponent<EagleAttribute>().curPos.name && tmp.name != hunters[2].GetComponent<EagleAttribute>().curPos.name)
+            {
+                hare.GetComponent<HareAttribute>().curPos = tmp;
+                hare.GetComponent<HareAttribute>().psbDes = tmp.GetComponent<HareAttribute>().psbDes;
+                hare.transform.position = new Vector3(tmp.transform.position.x, hare.transform.position.y, tmp.transform.position.z);
+                return true;
+            }
+        }
+            for (i = 0;  i <= 7 && hare.GetComponent<HareAttribute>().psbDes[i] != null; i++)
         {
             tmp = hare.GetComponent<HareAttribute>().psbDes[i];
             if ((tmp.name == "Pos1" || tmp.name == "Pos2" || tmp.name == "Pos3" || tmp.name == "Pos5") && tmp.name != hunters[0].GetComponent<EagleAttribute>().curPos.name && tmp.name != hunters[1].GetComponent<EagleAttribute>().curPos.name && tmp.name != hunters[2].GetComponent<EagleAttribute>().curPos.name)
