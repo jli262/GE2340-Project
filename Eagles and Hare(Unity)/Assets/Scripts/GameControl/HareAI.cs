@@ -136,8 +136,8 @@ public class HareAI : MonoBehaviour
         {
             tmp = hare.GetComponent<HareAttribute>().psbDes[i];
             if (tmp.transform.position.x <= hunters[0].GetComponent<EagleAttribute>().curPos.transform.position.x
-        && tmp.transform.position.x <= hunters[1].GetComponent<EagleAttribute>().curPos.transform.position.x
-        && tmp.transform.position.x <= hunters[2].GetComponent<EagleAttribute>().curPos.transform.position.x && tmp.name != hunters[0].GetComponent<EagleAttribute>().curPos.name && tmp.name != hunters[1].GetComponent<EagleAttribute>().curPos.name && tmp.name != hunters[2].GetComponent<EagleAttribute>().curPos.name)
+            && tmp.transform.position.x <= hunters[1].GetComponent<EagleAttribute>().curPos.transform.position.x
+            && tmp.transform.position.x <= hunters[2].GetComponent<EagleAttribute>().curPos.transform.position.x && tmp.name != hunters[0].GetComponent<EagleAttribute>().curPos.name && tmp.name != hunters[1].GetComponent<EagleAttribute>().curPos.name && tmp.name != hunters[2].GetComponent<EagleAttribute>().curPos.name)
             {
                 hare.GetComponent<HareAttribute>().curPos = tmp;
                 hare.GetComponent<HareAttribute>().psbDes = tmp.GetComponent<HareAttribute>().psbDes;
