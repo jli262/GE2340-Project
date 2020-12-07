@@ -439,7 +439,8 @@ MonoBehaviour:
     Eagles:
     The hare can not move any more.
 
-    Hare: Pass the eagles and successfully escape.'
+    Hare: Pass the eagles and successfully escape,
+    or the steps in total are larger than 30.'
 --- !u!222 &1126086788
 CanvasRenderer:
   m_ObjectHideFlags: 0

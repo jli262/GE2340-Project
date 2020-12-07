@@ -263,7 +263,7 @@ public class HareAI : MonoBehaviour
     {
         if (stepNum == 31)
         {
-            Win.SetActive(true);
+            Lose.SetActive(true);
             return true;
         }
         if ((hare.GetComponent<HareAttribute>().psbDes[0].transform.position == hunters[0].GetComponent<EagleAttribute>().curPos.transform.position || hare.GetComponent<HareAttribute>().psbDes[0].transform.position == hunters[1].GetComponent<EagleAttribute>().curPos.transform.position || hare.GetComponent<HareAttribute>().psbDes[0].transform.position == hunters[2].GetComponent<EagleAttribute>().curPos.transform.position)
